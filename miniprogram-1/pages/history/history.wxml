@@ -1,0 +1,91 @@
+<!-- pages/history/history.wxml -->
+<view class="page">
+  <!-- Header -->
+  <view class="header">
+    <view class="header-left" bindtap="onBack">
+      <text class="icon"> </text>
+    </view>
+    <view class="header-title">历史记录</view>
+    <view class="header-right" bindtap="refresh">
+      <text class="header-action">刷新</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="status">加载中…</view>
+  <view wx:if="{{error}}" class="status error">错误：{{error}}</view>
+
+  <view wx:if="{{!loading && !error && items.length === 0}}" class="empty">
+    <text class="empty-icon">🗂️</text>
+    <text class="empty-text">暂无历史记录</text>
+  </view>
+
+  <!-- List -->
+  <view class="list" wx:if="{{items.length > 0}}">
+    <view
+      wx:for="{{items}}"
+      wx:key="id"
+      class="card"
+      bindtap="openReport"
+      data-id="{{item.id}}"
+    >
+      <!-- 右上角 ... 菜单：独立，不压分数框 -->
+      <view class="more" catchtap="openMore" data-id="{{item.id}}" data-name="{{item.name}}">
+        <text class="more-icon">⋯</text>
+      </view>
+
+      <view class="row">
+        <!-- 左侧文字区 -->
+        <view class="left">
+          <view class="name">{{item.name}}</view>
+
+          <view class="subrow">
+            <text class="subtxt">{{item.dateText}}</text>
+            <text class="dot">·</text>
+            <text class="subtxt">身份：{{item.identityText}}</text>
+          </view>
+
+          <!-- 合同原文节选 -->
+          <view class="snippet-row" catchtap="openSnippet" data-id="{{item.id}}">
+            <text class="snippet-label">合同原文：</text>
+            <text class="snippet-text">{{item.snippetPreview}}</text>
+            <text class="snippet-more">查看</text>
+          </view>
+        </view>
+
+        <!-- 右侧分数框（包含风险等级 + 分数） -->
+        <view class="right">
+          <view class="scoreBox {{item.riskClass}}">
+            <view class="scoreBoxInner">
+              <view class="scoreRisk">{{item.riskText}}</view>
+              <view class="scoreNum">{{item.score}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ✅ 合同原文节选弹窗 -->
+  <view wx:if="{{snippetOpen}}" class="modal-mask" catchtap="closeSnippet">
+    <view class="modal" catchtap="noop">
+      <view class="modal-head">
+        <view class="modal-title">合同原文节选</view>
+        <view class="modal-close" catchtap="closeSnippet">✕</view>
+      </view>
+
+      <view class="modal-sub">
+        <text class="modal-name">{{snippetTitle}}</text>
+        <text class="modal-meta">{{snippetMeta}}</text>
+      </view>
+
+      <scroll-view scroll-y="true" class="modal-body">
+        <text class="modal-text">{{snippetText}}</text>
+      </scroll-view>
+
+      <view class="modal-foot">
+        <button class="modal-btn" bindtap="closeSnippet">关闭</button>
+      </view>
+    </view>
+  </view>
+</view>
+

@@ -1,0 +1,9 @@
+<!--components/tips-carousel/tips-carousel.wxml-->
+<view class="tips">
+  <view class="icon">💡</view>
+
+  <view class="content">
+    <view class="title">{{title}}</view>
+    <view class="text">{{tip}}</view>
+  </view>
+</view>

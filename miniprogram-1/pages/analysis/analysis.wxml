@@ -1,0 +1,120 @@
+<!-- pages/analysis/analysis.wxml -->
+<view class="page">
+
+<!-- 顶部导航 -->
+<view class="nav">
+  <view class="nav-left" bindtap="onCancelTap">✕</view>
+  <view class="nav-title">正在分析合同</view>
+  <view class="nav-right"></view>
+</view>
+
+<!-- 核心视觉：圆环 + 文件预览 + 扫描线 -->
+<view class="hero">
+  <view class="ring ring-outer"></view>
+  <view class="ring ring-inner"></view>
+
+  <!-- PDF -->
+  <view wx:if="{{isPdf}}" class="fileCard pdf">
+    <view class="fileIcon">📄</view>
+    <view class="fileText">PDF</view>
+  </view>
+
+  <!-- DOCX -->
+  <view wx:elif="{{isDocx}}" class="fileCard docx">
+    <view class="fileIcon">📝</view>
+    <view class="fileText">DOCX</view>
+  </view>
+
+  <!-- 图片 / 多图 -->
+  <view wx:elif="{{isImage || isMultiImage}}" class="imageCard">
+    <image class="image" src="{{previewImage}}" mode="aspectFill" />
+    <view wx:if="{{isMultiImage}}" class="badge">{{imageCount}} 页</view>
+  </view>
+
+  <!-- 兜底 -->
+  <view wx:else class="fileCard generic">
+    <view class="fileIcon">📃</view>
+    <view class="fileText">DOC</view>
+  </view>
+
+  <!-- 扫描线：仅上传类 & progress < 90 -->
+  <view
+    wx:if="{{isUpload && progress < 90}}"
+    class="scan {{isPdf ? 'scan-pdf' : (isDocx ? 'scan-docx' : 'scan-img')}}"
+  ></view>
+</view>
+
+<!-- 文案 -->
+<view class="copy">
+  <view class="headline">
+    {{isPdf ? '正在读取 PDF 条款...'
+      : isDocx ? '正在读取 Word 文档条款...'
+      : (isImage || isMultiImage) ? '正在智能OCR并识别条款...'
+      : '正在解析条款内容...'}}
+  </view>
+  <view class="sub">
+    我们的 AI 正在扫描您的文档，识别隐藏风险和不利条款。
+  </view>
+</view>
+
+<!-- 进度卡片（直条进度） -->
+<view class="progressCard">
+  <view class="progressRow">
+    <view class="progressTitle">分析总进度</view>
+    <view class="progressPct">{{progressText}}%</view>
+  </view>
+
+  <view class="progressBar">
+    <view class="progressFill" style="width: {{progress}}%;"></view>
+  </view>
+
+  <view class="progressHint">
+    {{progress < 100
+      ? (isPdf ? '正在解析多页文档结构...'
+        : isDocx ? '正在提取 Word 文本结构...'
+        : (isImage || isMultiImage) ? '正在进行视觉OCR提取...'
+        : '正在识别潜在法律责任...')
+      : '分析完成，正在生成报告...'}}
+  </view>
+</view>
+
+<!-- 分析阶段 Step 1–4 -->
+<view class="steps">
+  <view class="step {{step >= 1 ? 'done' : (step === 0 ? 'active' : '')}}">
+    <view class="dot">1</view>
+    <view class="label">读取合同内容</view>
+  </view>
+  <view class="step {{step >= 2 ? 'done' : (step === 1 ? 'active' : '')}}">
+    <view class="dot">2</view>
+    <view class="label">识别关键条款</view>
+  </view>
+  <view class="step {{step >= 3 ? 'done' : (step === 2 ? 'active' : '')}}">
+    <view class="dot">3</view>
+    <view class="label">分析风险与责任</view>
+  </view>
+  <view class="step {{step >= 4 ? 'done' : (step === 3 ? 'active' : '')}}">
+    <view class="dot">4</view>
+    <view class="label">生成分析报告</view>
+  </view>
+</view>
+
+<!-- Tips -->
+<view class="tips">
+  <tips-carousel title="小贴士" interval="6000" />
+</view>
+
+<!-- 取消 -->
+<view class="cancelBtn" bindtap="onCancelTap">取消分析</view>
+
+<!-- 取消确认弹窗 -->
+<view wx:if="{{showCancelConfirm}}" class="overlay">
+  <view class="modal">
+    <view class="m-title">确认取消分析？</view>
+    <view class="m-sub">当前分析进度将丢失</view>
+    <view class="m-btns">
+      <view class="btn ghost" bindtap="cancelCancel">继续分析</view>
+      <view class="btn danger" bindtap="confirmCancel">确认取消</view>
+    </view>
+  </view>
+</view>
+</view>

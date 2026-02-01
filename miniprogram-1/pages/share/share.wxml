@@ -1,0 +1,69 @@
+<!--pages/share/share.wxml-->
+<view class="page">
+
+<!-- Loading -->
+<view wx:if="{{loading}}" class="center muted">
+  正在加载风险摘要…
+</view>
+
+<!-- Error / Expired -->
+<view wx:elif="{{error}}" class="center muted">
+  {{error}}
+</view>
+
+<!-- Content -->
+<view wx:else class="panel">
+
+  <!-- 分数环（视觉中心，非 canvas） -->
+  <!-- 分数圈圈 -->
+  <canvas
+    canvas-id="scoreRing"
+    class="score-ring-canvas"
+  ></canvas>
+  <view class="score-center">
+    <text class="contract-name">{{contractName}}</text>
+    <view class="score-num">{{score}}</view>
+    <view class="score-label">风险评估分</view>
+  </view>
+
+
+  <!-- 结论 -->
+  <view class="score-title">
+    {{scoreTitle}}
+  </view>
+
+  <!-- 风险摘要 -->
+  <view class="summary">
+    {{riskSummary}}
+  </view>
+
+  <!-- CTA -->
+  <view class="cta" bindtap="onCTA">
+    想分析你自己的合同？
+    <text class="cta-strong">立即使用 签前助手</text>
+  </view>
+
+  <view class="share-footer">
+  本报告由「签前助手」生成 · 分享有效期至 {{expiresDate}}
+  </view>
+</view>
+
+<!-- 品牌露出：霓虹圆环 + 玻璃底座 -->
+<view class="brand">
+  <view class="qr-badge">
+    <view class="qr-ring"></view>
+
+    <view class="qr-inner">
+      <image
+        class="brand-qrcode"
+        src="/assets/MPQrcode.jpg"
+        mode="aspectFit"
+      />
+    </view>
+  </view>
+
+  <view class="brand-text">
+    签前助手 · AI 合同风险分析
+  </view>
+</view>
+</view>

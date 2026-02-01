@@ -1,0 +1,583 @@
+/* pages/report/report.wxss */
+
+/* ====== 基础布局 ====== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #17529c 40%, #0b1220 100%);
+}
+
+.container {
+  padding: 0 32rpx;
+}
+
+/* ====== 顶部导航（sticky） ====== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #17529c;
+  backdrop-filter: blur(0px);
+  border-bottom: 1rpx solid #6188d7;
+}
+
+.nav-inner {
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20rpx;
+}
+
+.nav-btn {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 999rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:active {
+  background: rgba(13, 18, 27, 0.06);
+}
+
+.nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #ebecef;
+}
+
+.nav-actions {
+  margin-left: auto;
+  width: 120rpx;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10rpx;
+}
+
+.nav-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon:active {
+  background: rgba(13, 18, 27, 0.06);
+}
+
+.nav-icon.disabled {
+  opacity: 0.35;
+}
+
+.icon {
+  font-size: 32rpx;
+  line-height: 1;
+  color: #fcfcfd;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 18rpx;
+  align-items: center;
+}
+
+/* 圆形按钮容器 */
+.icon-btn {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 999rpx;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 视觉：轻玻璃感 */
+  background: rgba(255, 255, 255, 0.92);
+  border: 0rpx solid rgba(18, 26, 44, 0.08);
+  box-shadow: 0 10rpx 26rpx rgba(18, 26, 44, 0.10);
+
+  /* 去掉 view/button 默认差异 */
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+/* icon 本体 */
+.icon-img {
+  width: 52rpx;
+  height: 52rpx;
+  opacity: 0.9;
+}
+
+/* 按压反馈 */
+.icon-btn:active {
+  transform: scale(0.94);
+  opacity: 0.96;
+}
+
+/* button 默认样式清理（关键） */
+.icon-btn--share {
+  background: rgba(255, 255, 255, 0.92);
+  border: 0rpx solid rgba(18, 26, 44, 0.08);
+}
+
+.icon-btn--share::after {
+  border: none; /* 去掉 button 的默认边框/高亮框 */
+}
+
+/* ====== Score Section ====== */
+.score-section {
+  padding-top: 44rpx;
+  padding-bottom: 20rpx;
+}
+
+.score-title {
+  font-size: 44rpx;
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  gap: 14rpx;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ✅ 签名 pill */
+.lot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(13, 18, 27, 0.06);
+  border: 1rpx solid #e6eaf2;
+}
+
+.score-ring-wrap {
+  position: relative;
+  width: 360rpx;
+  height: 360rpx;
+  margin: 28rpx auto 0;
+}
+
+.score-ring {
+  width: 360rpx;
+  height: 360rpx;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  stroke: #cfd7e7;
+}
+
+/* ✅ ring-fg 只负责动画，颜色由 inline style 控制 */
+.ring-fg {
+  transition: stroke-dashoffset 1000ms ease-out;
+}
+
+.score-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.score-num {
+  font-size: 76rpx;
+  font-weight: 900;
+  color: #0d121b;
+  line-height: 1.1;
+}
+
+.score-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #4c669a;
+  font-weight: 600;
+}
+
+.score-summary {
+  margin-top: 18rpx;
+  padding: 0 36rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* ✅ 新：分数卡片 */
+.score-card {
+  margin: 20rpx 20rpx 0;
+  border-radius: 28rpx;
+  border: 1rpx solid #cfd7e7;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 22rpx 22rpx 22rpx;
+}
+
+/* 大分数 */
+.score-big {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10rpx;
+  margin-top: 6rpx;
+}
+
+.score-big-num {
+  font-size: 96rpx;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.score-big-den {
+  font-size: 26rpx;
+  font-weight: 800;
+  color:rgba(255, 255, 255, 0.6);
+}
+
+/* ✅ 仪表条 */
+.meter-wrap {
+  margin-top: 18rpx;
+  padding: 0 6rpx;
+}
+
+.meter-track {
+  position: relative;
+  height: 35rpx;
+  border-radius: 999rpx;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1rpx solid rgba(110, 247, 255, 0.18);
+}
+
+/* 底层渐变：红->橙->绿（永远是满长度） */
+.meter-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #e5484d 0%, #f59e0b 50%, #22c55e 100%);
+}
+
+/* 遮罩：遮住右侧未完成部分（显示“到当前分数为止”的渐变） */
+.meter-mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+/* 指示点 */
+.meter-dot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 999rpx;
+  background: #fff;
+  border: 3rpx solid #f59e0b; /* 会被 inline 覆盖 */
+  box-shadow: 0 8rpx 18rpx rgba(13, 18, 27, 0.12);
+}
+
+.meter-dot-inner {
+  position: absolute;
+  inset: 8rpx;
+  border-radius: 999rpx;
+  background: #f59e0b; /* 会被 inline 覆盖 */
+}
+
+/* 刻度 */
+.meter-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12rpx;
+  padding: 0 4rpx;
+}
+
+.meter-scale-text {
+  font-size: 22rpx;
+  color: #8694ad;
+  font-weight: 700;
+}
+
+/* 提示语 */
+.meter-hint {
+  margin-top: 12rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* Disclaimer */
+.disclaimer {
+  margin-top: 18rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid #cfd7e7;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1rpx solid rgba(110, 247, 255, 0.25);
+  backdrop-filter: blur(12px);
+  padding: 18rpx 18rpx;
+}
+
+.disclaimer-row {
+  display: flex;
+  gap: 12rpx;
+  align-items: flex-start;
+}
+
+.disclaimer-icon {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 999rpx;
+  background: #c9c7c7;
+  color: rgba(11, 18, 32, 0.85);
+  font-size: 22rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rpx;
+}
+
+.disclaimer-text {
+  flex: 1;
+  font-size: 22rpx;
+  color: #c9c7c7;
+  line-height: 1.55;
+}
+
+/* ====== 通用区块标题 ====== */
+.section-title {
+  margin-top: 26rpx;
+  padding: 10rpx 4rpx 14rpx;
+  font-size: 34rpx;
+  font-weight: 900;
+  color: #ffffff
+}
+
+/* ====== Card ====== */
+.card {
+  background:rgba(255, 255, 255, 0.1);
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(110, 247, 255, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.card-header {
+  padding: 22rpx 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.doc-icon {
+  font-size: 28rpx;
+}
+
+.card-header-title {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #ffffff
+}
+
+.chev {
+  font-size: 28rpx;
+  color: #ffffff;
+  transition: transform 200ms ease;
+}
+
+.chev-open {
+  transform: rotate(180deg);
+}
+
+.card-body {
+  border-top: 1rpx solid #e6eaf2;
+  padding: 18rpx 20rpx 22rpx;
+  font-size: 22rpx;
+  color: #e6eaf2;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* ====== Clauses ====== */
+.clause-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding-bottom: 24rpx;
+}
+
+.clause {
+  padding: 20rpx;
+}
+
+.clause-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 18rpx;
+  align-items: flex-start;
+}
+
+.clause-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.clause-title {
+  font-size: 26rpx;
+  font-weight: 900;
+  color: #0d121b;
+}
+
+.clause-section {
+  font-size: 22rpx;
+  color: #4c669a;
+}
+
+/* ✅ level 胶囊：更像 Web 版 */
+.level-pill {
+  padding: 6rpx 12rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 900;
+  border: 1rpx solid rgba(76, 102, 154, 0.25);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* 字色风险态 */
+.risk-text--high { color: #e5484d; }
+.risk-text--medium { color: #f59e0b; }
+.risk-text--low { color: #22c55e; }
+.risk-text--default { color: #4c669a; }
+
+/* pill 边框跟着风险态 */
+.level-pill.risk-text--high { border-color: rgba(229, 72, 77, 0.35); }
+.level-pill.risk-text--medium { border-color: rgba(245, 158, 11, 0.35); }
+.level-pill.risk-text--low { border-color: rgba(34, 197, 94, 0.35); }
+
+/* 背景 + 边框风险态（卡片本身） */
+.clause--high {
+  background: #fff5f5;
+  border-color: #e5484d;
+}
+.clause--medium {
+  background: #fffbeb;
+  border-color: #f59e0b;
+}
+.clause--low {
+  background: #f0fdf4;
+  border-color: #22c55e;
+}
+
+.clause-line {
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: #4c669a;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.clause-label {
+  font-weight: 900;
+  color: #0d121b;
+}
+
+.clause-text {
+  color: #4c669a;
+}
+
+.empty {
+  font-size: 24rpx;
+  color: #8694ad;
+  padding: 10rpx 6rpx;
+}
+
+/* ====== AI boundary ====== */
+.ai-boundary {
+  margin-top: 18rpx;
+  padding: 20rpx;
+}
+
+.ai-row {
+  display: flex;
+  gap: 14rpx;
+  align-items: flex-start;
+}
+
+.ai-icon {
+  width: 38rpx;
+  height: 38rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rpx;
+}
+
+.ai-content {
+  flex: 1;
+}
+
+.ai-title {
+  font-size: 26rpx;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.ai-text {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+.bottom-space {
+  height: 60rpx;
+}
+
+/* 原有样式全部保留，这里只新增 */
+
+.poster-canvas {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 750px;
+  height: 1800px;
+}
+
+.share-btn {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  line-height: normal;
+}
+.share-btn::after {
+  border: none;
+}

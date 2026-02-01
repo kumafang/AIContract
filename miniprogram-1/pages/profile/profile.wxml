@@ -1,0 +1,268 @@
+<!-- pages/profile/profile.wxml -->
+<view class="container">
+  <view class="title">我的</view>
+
+  <!-- 顶部资料卡 -->
+  <view class="card">
+    <view class="top">
+      <image class="avatar" mode="aspectFill" src="{{avatarSrc}}" wx:if="{{authed && avatarSrc}}" />
+      <view class="avatar placeholder" wx:else>
+        <view class="avatar-icon"></view>
+      </view>
+
+      <view class="info">
+        <view class="name">{{ editName || "微信用户" }}</view>
+        <view class="status">{{ authed ? "已登入" : "未登入" }}</view>
+      </view>
+
+      <view class="right">
+        <button
+          wx:if="{{!authed}}"
+          type="primary"
+          size="mini"
+          loading="{{isLoggingIn}}"
+          disabled="{{isLoggingIn}}"
+          bindtap="onWechatLogin"
+        >
+          微信登录
+        </button>
+
+        <button wx:else size="mini" bindtap="onLogout">退出</button>
+      </view>
+    </view>
+
+    <view class="hint" wx:if="{{loadingMe}}">
+      正在同步账号信息...
+    </view>
+  </view>
+
+  <!-- 余额卡 -->
+  <view class="credit-card" wx:if="{{authed}}">
+    <view class="credit-left">
+      <view class="credit-text">
+        <view class="credit-title">余额</view>
+        <view class="credit-sub">每次分析消耗「1个」芒果币</view>
+      </view>
+    </view>
+
+    <view class="credit-right">
+      <image class="hammer-img" src="/assets/MangoCoin.png" mode="aspectFit" />
+      <view class="credit-title">x</view>
+      <text class="credit-num">{{credits}}</text>
+    </view>
+  </view>
+
+  <view class="credit-card credit-card--disabled" wx:else>
+    <view class="credit-left">
+      <view class="credit-text">
+        <view class="credit-title">余额</view>
+        <view class="credit-sub">登录后可查看余额</view>
+      </view>
+    </view>
+    <view class="credit-right">
+      <image class="hammer-img" src="/assets/MangoCoin.png" mode="aspectFit" />
+      <view class="credit-title">x</view>
+      <text class="credit-title">-</text>
+    </view>
+  </view>
+
+  <!-- ✅ 充值按钮（放在余额卡下面） -->
+  <view class="recharge-wrap">
+    <button class="recharge-btn" type="primary" bindtap="openRecharge" disabled="{{!authed}}">
+      购买芒果币
+    </button>
+    <view class="recharge-hint" wx:if="{{authed}}">
+      <!--充值后将自动更新余额-->
+    </view>
+  </view>
+  
+  <!-- ✅ 充值记录（时间轴 + 最近1条 + 展开更多） -->
+  <view class="orders-card" wx:if="{{authed}}">
+    <view class="orders-head">
+      <view class="orders-title">充值记录</view>
+
+      <view class="orders-action" wx:if="{{payOrders && payOrders.length > 1}}" bindtap="toggleOrders">
+        {{ordersExpanded ? '收起' : '展开更多'}}
+      </view>
+
+      <view class="orders-sub" wx:if="{{ordersLoading}}">加载中...</view>
+    </view>
+
+    <view wx:if="{{!ordersLoading && (!displayOrders || displayOrders.length === 0)}}" class="orders-empty">
+      暂无充值记录
+    </view>
+
+    <view class="timeline" wx:if="{{displayOrders && displayOrders.length > 0}}">
+      <view class="t-item" wx:for="{{displayOrders}}" wx:key="outTradeNo">
+        <!-- 左侧时间轴 -->
+        <view class="t-left">
+          <view class="t-dot {{item.status === 'PAID' ? 't-dot--paid' : ''}}"></view>
+          <view class="t-line" wx:if="{{index !== (displayOrders.length - 1)}}"></view>
+        </view>
+
+        <!-- 右侧内容 -->
+        <view class="t-right">
+          <view class="t-top">
+            <text class="t-credits">+{{item.credits}} 芒果币</text>
+            <image class="recharge-history" src="/assets/MangoCoin.png" mode="aspectFit" />
+            <text class="t-fee">¥{{item.feeText}}</text>
+          </view>
+
+          <view class="t-bottom">
+            <text class="t-time">{{item.timeText}}</text>
+            <text class="t-status">{{item.statusText}}</text>
+          </view>
+
+          <view class="t-no">订单号：{{item.outTradeNo}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部提示：收起状态显示“仅展示最近1条” -->
+    <view class="orders-foot" wx:if="{{payOrders && payOrders.length > 1 && !ordersExpanded}}">
+      仅展示最近 1 条
+    </view>
+  </view>
+
+  <!-- 菜单 -->
+  <view class="menu">
+    <view class="menu-item" bindtap="openEditProfile">
+      <text>修改头像和昵称</text>
+      <text class="chev">›</text>
+    </view>
+
+    <view class="menu-item" bindtap="onGoPrivacy">
+      <text>隐私协议</text>
+      <text class="chev">›</text>
+    </view>
+
+    <view class="menu-item" bindtap="onGoAbout">
+      <text>关于我们</text>
+      <text class="chev">›</text>
+    </view>
+
+    <view class="menu-item" bindtap="onGoHelp">
+      <text>帮助与反馈</text>
+      <text class="chev">›</text>
+    </view>
+  </view>
+
+  <!-- 修改资料弹窗（你原来的） -->
+  <view class="modal-mask" wx:if="{{showEditModal}}" catchtouchmove="true">
+    <view class="modal">
+      <view class="modal-title">修改头像和昵称</view>
+
+      <view class="modal-row">
+        <view class="modal-label">头像</view>
+        <view class="modal-avatar">
+          <image class="avatar modal-avatar-img" mode="aspectFill" src="{{avatarSrc}}" wx:if="{{authed && avatarSrc}}" />
+          <view class="avatar placeholder modal-avatar-img" wx:else>
+            <view class="avatar-icon"></view>
+          </view>
+
+          <button
+            class="modal-btn"
+            size="mini"
+            open-type="chooseAvatar"
+            bindchooseavatar="onChooseAvatar"
+            disabled="{{!authed || uploadingAvatar}}"
+          >
+            {{ uploadingAvatar ? "上传中..." : "选择头像" }}
+          </button>
+        </view>
+      </view>
+
+      <view class="modal-row">
+        <view class="modal-label">昵称</view>
+        <input
+          class="modal-input"
+          value="{{editName}}"
+          placeholder="请输入昵称"
+          bindinput="onNameInput"
+          disabled="{{!authed || savingProfile}}"
+        />
+      </view>
+
+      <view class="modal-actions">
+        <button class="modal-btn ghost" size="mini" bindtap="closeEditProfile">取消</button>
+        <button
+          class="modal-btn primary"
+          size="mini"
+          type="primary"
+          bindtap="onSaveProfile"
+          loading="{{savingProfile}}"
+          disabled="{{!authed || savingProfile}}"
+        >
+          保存
+        </button>
+      </view>
+
+      <view class="modal-tip" wx:if="{{!authed}}">
+        请先登录后再修改头像和昵称
+      </view>
+      <view class="modal-tip" wx:if="{{saveHint}}">
+        {{saveHint}}
+      </view>
+    </view>
+  </view>
+
+  <!-- ✅ 充值弹窗 -->
+  <view class="modal-mask" wx:if="{{showRechargeModal}}" catchtouchmove="true">
+    <view class="modal">
+      <view class="modal-title">选择充值套餐</view>
+
+      <view class="sku-list">
+        <view
+          class="sku-item {{selectedSku === item.id ? 'sku-item--active' : ''}}"
+          wx:for="{{skuList}}"
+          wx:key="id"
+          data-sku="{{item.id}}"
+          bindtap="onPickSku"
+        >
+        <view class="sku-left">
+          <!-- 第一行：数量 + 芒果币icon +（可选）优惠标签 -->
+          <view class="sku-row1">
+            <text class="sku-amount">{{item.amount}}</text>
+            <image class="sku-coin" src="/assets/MangoCoin.png" mode="aspectFit" />
+            <text class="sku-unit">芒果币</text>
+
+            <text class="sku-tag" wx:if="{{item.promoTag}}">{{item.promoTag}}</text>
+          </view>
+
+          <!-- 第二行：价格（原价删除线 + 优惠价） -->
+          <view class="sku-row2">
+            <text class="sku-price-origin" wx:if="{{item.priceOrigin}}">{{item.priceOrigin}}</text>
+            <text class="sku-price-now">{{item.priceNow}}</text>
+            <view class="sku-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+          </view>
+
+          <!-- 第三行：可选描述 -->
+        </view>
+          <view class="sku-right">
+            <text class="sku-check">{{selectedSku === item.id ? '已选' : '选择'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-actions">
+        <button class="modal-btn ghost" size="mini" bindtap="closeRecharge" disabled="{{paying}}">
+          取消
+        </button>
+        <button
+          class="modal-btn primary"
+          size="mini"
+          type="primary"
+          bindtap="onPayNow"
+          loading="{{paying}}"
+          disabled="{{paying}}"
+        >
+          {{paying ? "处理中..." : "立即支付"}}
+        </button>
+      </view>
+
+      <view class="modal-tip">
+        <!-- 支付完成后会自动更新余额 -->
+      </view>
+    </view>
+  </view>
+</view>

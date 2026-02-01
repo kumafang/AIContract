@@ -1,0 +1,56 @@
+/* pages/privacy/privacy.wxss */
+.page {
+  height: 100vh;
+  background: #f7f8fc;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(247,248,252,.9);
+  border-bottom: 1rpx solid #e6eaf2;
+}
+
+.nav-inner {
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+.nav-btn {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 32rpx;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.nav-right {
+  width: 80rpx;
+}
+
+.content {
+  height: calc(100vh - 96rpx);
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.text {
+  font-size: 26rpx;
+  line-height: 1.7;
+  color: #4c669a;
+  white-space: pre-wrap;
+}

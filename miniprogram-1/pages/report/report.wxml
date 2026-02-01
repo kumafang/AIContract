@@ -1,0 +1,158 @@
+<!-- pages/report/report.wxml -->
+<view class="page" wx:if="{{analysis}}">
+
+<!-- 顶部导航（sticky） -->
+<view class="nav">
+  <view class="nav-inner">
+    <view class="nav-title">风险分析报告</view>
+
+    <!-- 右侧操作区：占位 -->
+    <view class="nav-actions">
+      <!-- 下载 -->
+      <view class="icon-btn" bindtap="onDownloadPoster" aria-label="下载">
+        <image class="icon-img" src="/assets/download.png" mode="aspectFit" />
+      </view>
+
+      <!-- 分享（必须用 button 才能 open-type=share） -->
+      <button class="icon-btn icon-btn--share" open-type="share" aria-label="分享">
+        <image class="icon-img" src="/assets/share.png" mode="aspectFill" />
+      </button>
+    </view>
+  </view>
+</view>
+
+<view class="container">
+  <!-- Score Section -->
+  <view class="score-section">
+    <view class="score-title">
+      {{scoreTitle}}
+      <text class="lot-pill">{{lotEmoji}} {{lotName}}</text>
+    </view>
+
+    <!-- ✅ 新：分数大卡 -->
+    <view class="score-card">
+      <view class="score-big">
+        <text class="score-big-num">{{analysis.score}}</text>
+        <text class="score-big-den">/100</text>
+      </view>
+
+      <!-- ✅ 新：仪表条 -->
+      <view class="meter-wrap">
+        <view class="meter-track">
+          <!-- 渐变条（底层） -->
+          <view class="meter-gradient"></view>
+
+          <!-- 遮罩层：把右侧遮住，露出 0..score 的渐变 -->
+          <view class="meter-mask" style="width: {{100 - meterPercent}}%;"></view>
+
+          <!-- 指示点 -->
+          <view class="meter-dot" style="left: {{meterLeft}}; border-color: {{meterColor}};">
+            <view class="meter-dot-inner" style="background: {{meterColor}};"></view>
+          </view>
+        </view>
+
+        <view class="meter-scale">
+          <text class="meter-scale-text">0</text>
+          <text class="meter-scale-text">50</text>
+          <text class="meter-scale-text">100</text>
+        </view>
+
+        <view class="meter-hint" style="color: {{meterColor}};">
+          {{analysis.score >= 90 ? "稳得一批，建议直接收下这份上上签" :
+            (analysis.score >= 70 ? "整体可签，但有几个地方需要留意" :
+            (analysis.score >= 40 ? "建议你在这些点上想清楚，重点修改后再签" : "强烈建议先停一停，不着急签"))}}
+        </view>
+      </view>
+    </view>
+
+    <view class="score-summary">
+      {{analysis.riskSummary || '暂无风险摘要'}}
+    </view>
+
+    <!-- Disclaimer -->
+    <view class="disclaimer">
+      <view class="disclaimer-row">
+        <text class="disclaimer-icon">i</text>
+        <text class="disclaimer-text">{{disclaimer}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 合同概览 -->
+  <view class="section-title">合同概览</view>
+
+  <view class="card">
+    <view class="card-header" bindtap="toggleOriginal">
+      <view class="card-header-left">
+        <text class="doc-icon">📄</text>
+        <text class="card-header-title">合同原文内容</text>
+      </view>
+      <text class="chev {{showOriginal ? 'chev-open' : ''}}">⌄</text>
+    </view>
+
+    <view wx:if="{{showOriginal}}" class="card-body">
+      {{analysis.originalContent || '暂无原文'}}
+    </view>
+  </view>
+
+  <!-- 风险条款 -->
+  <view class="section-title">风险条款清单</view>
+
+  <view class="clause-list">
+    <block wx:for="{{analysis.clauses}}" wx:key="index">
+      <!-- ✅ 不再调用函数：直接用预计算的 bgClass/textClass -->
+      <view class="clause card {{item.bgClass}}">
+        <view class="clause-top">
+          <view class="clause-meta">
+            <view class="clause-title">{{item.title || '风险点'}}</view>
+          </view>
+
+          <view wx:if="{{item.levelUpper}}" class="level-pill {{item.textClass}}">
+            {{item.levelCn}}
+          </view>
+        </view>
+
+        <view wx:if="{{item.originalText}}" class="clause-line">
+          <text class="clause-label">原文：</text>
+          <text class="clause-text">{{item.originalText}}</text>
+        </view>
+
+        <view wx:if="{{item.explanation}}" class="clause-line">
+          <text class="clause-label">解释：</text>
+          <text class="clause-text">{{item.explanation}}</text>
+        </view>
+
+        <view wx:if="{{item.suggestion}}" class="clause-line">
+          <text class="clause-label">建议：</text>
+          <text class="clause-text">{{item.suggestion}}</text>
+        </view>
+      </view>
+    </block>
+
+    <view wx:if="{{!analysis.clauses || analysis.clauses.length === 0}}" class="empty">
+      未识别到明确的风险条款（或合同文本较短/不完整）。
+    </view>
+  </view>
+
+  <!-- AI 行为边界说明 -->
+  <view class="ai-boundary card">
+    <view class="ai-row">
+      <text class="ai-icon">i</text>
+      <view class="ai-content">
+        <view class="ai-title">AI 分析边界说明</view>
+        <view class="ai-text">
+          本分析仅用于风险识别与理解辅助，不构成法律意见或承诺。
+          “建议签署 / 修改后再签”是基于风险视角的判断，不能替代律师审核与正式法律咨询。
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-space"></view>
+</view>
+<canvas
+    canvas-id="posterCanvas"
+    class="poster-canvas"
+  ></canvas>
+
+</view>

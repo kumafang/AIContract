@@ -1,0 +1,402 @@
+/* pages/history/history.wxss */
+
+/* Page */
+.page {
+  min-height: 100vh;
+  background: #f7f8fa; /* ✅ 与 Profile 一致 */
+  padding-bottom: 40rpx;
+}
+
+/* Header：微信式白色导航 */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 22rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+}
+
+.header-left {
+  width: 120rpx;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  color: #0d121b;
+  font-size: 44rpx;
+  line-height: 44rpx;
+}
+
+.header-title {
+  color: #0d121b;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.header-right {
+  width: 120rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-action {
+  color: #6b7280;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+/* Status / Empty */
+.status {
+  padding: 20rpx 24rpx;
+  color: #6b7280;
+  font-size: 26rpx;
+}
+.status.error {
+  color: #dc2626;
+}
+
+.empty {
+  padding: 160rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18rpx;
+}
+.empty-icon {
+  font-size: 64rpx;
+}
+.empty-text {
+  color: #6b7280;
+  font-size: 28rpx;
+}
+
+/* List */
+.list {
+  padding: 18rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* Card：白卡 + 轻边框 + 轻阴影 */
+.card {
+  position: relative;
+  border-radius: 16rpx; /* ✅ 对齐 Profile card/menu */
+  padding: 28rpx 24rpx;
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+/* more menu：弱化 */
+.more {
+  position: absolute;
+  top: 14rpx;
+  right: 18rpx;
+  width: 64rpx;
+  height: 44rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  z-index: 2;
+}
+.more:active {
+  background: #f3f4f6;
+  border-color: #eee;
+}
+.more-icon {
+  color: #9ca3af;
+  font-size: 40rpx;
+  line-height: 40rpx;
+}
+
+/* layout */
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 18rpx;
+}
+
+.left {
+  flex: 1;
+  min-width: 0;
+}
+
+.right {
+  flex: none;
+  width: 170rpx; /* 稍微收一点更像微信信息密度 */
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+/* Title + meta */
+.name {
+  color: #0d121b;
+  font-size: 32rpx;
+  font-weight: 700;
+  line-height: 1.25;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.subrow {
+  margin-top: 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.subtxt {
+  color: #6b7280;
+  font-size: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dot {
+  color: #9ca3af;
+  font-size: 24rpx;
+}
+
+/* snippet-row：二级信息行（浅灰底） */
+.snippet-row {
+  margin-top: 12rpx;
+  padding: 14rpx 14rpx;
+  border-radius: 12rpx;
+  background: #f7f8fa;
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  min-width: 0;
+}
+
+.snippet-label {
+  color: #6b7280;
+  font-size: 22rpx;
+  flex: none;
+}
+
+.snippet-text {
+  color: #374151;
+  font-size: 22rpx;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.snippet-more {
+  color: #17529c; /* 你品牌色保留，但不做霓虹 */
+  font-size: 22rpx;
+  font-weight: 700;
+  flex: none;
+}
+
+/* scoreBox：更“微信式信息卡”，弱化仪表盘高光纹理 */
+.scoreBox {
+  width: 150rpx;
+  height: 116rpx;
+  margin-top: 30rpx;
+  border-radius: 16rpx;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  border: 1px solid #eee;
+  box-shadow: 0 8rpx 18rpx rgba(0, 0, 0, 0.06);
+}
+
+/* 去掉原来的玻璃高光和纹理 */
+.scoreBox::before,
+.scoreBox::after {
+  content: none;
+}
+
+.scoreBoxInner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.scoreRisk {
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  color: #6b7280; /* 默认灰 */
+}
+
+.scoreNum {
+  font-size: 52rpx; /* ✅ 比 60rpx 收一点，更像微信 */
+  font-weight: 800;
+  line-height: 1;
+  color: #0d121b;
+}
+
+/* 风险色：用“淡底 + 淡边 + 彩色字” */
+.risk-low.scoreBox {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.06);
+}
+.risk-low .scoreRisk,
+.risk-low .scoreNum {
+  color: rgba(22, 163, 74, 0.95);
+}
+
+.risk-medium.scoreBox {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.07);
+}
+.risk-medium .scoreRisk,
+.risk-medium .scoreNum {
+  color: rgba(217, 119, 6, 0.95);
+}
+
+.risk-high.scoreBox {
+  border-color: rgba(229, 72, 77, 0.35);
+  background: rgba(229, 72, 77, 0.07);
+}
+.risk-high .scoreRisk,
+.risk-high .scoreNum {
+  color: rgba(220, 38, 38, 0.95);
+}
+
+/* Modal：统一到 Profile 的遮罩/白卡语言 */
+.modal-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+}
+
+.modal {
+  width: 100%;
+  max-width: 680rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.modal-head {
+  padding: 18rpx 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+  color: #0d121b;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.modal-close {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  background: #f7f8fa;
+  border: 1px solid #eee;
+}
+
+.modal-sub {
+  padding: 14rpx 18rpx 0 18rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.modal-name {
+  color: #0d121b;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.modal-meta {
+  color: #6b7280;
+  font-size: 22rpx;
+}
+
+.modal-body {
+  max-height: 60vh;
+  padding: 18rpx;
+}
+
+.modal-text {
+  color: #374151;
+  font-size: 24rpx;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.modal-foot {
+  padding: 18rpx;
+  border-top: 1px solid #eee;
+}
+
+.modal-btn {
+  width: 100%;
+  height: 84rpx;
+  border-radius: 16rpx;
+  background: #17529c;
+  border: 1px solid #17529c;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+/* ✅ 微信式按压态：卡片轻微变灰 + 阴影收一点 */
+.card:active {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+/* ✅ snippet 行也有轻微按压反馈（因为它可点） */
+.snippet-row:active {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+/* ✅ 顶部“刷新”点击反馈 */
+.header-right:active .header-action {
+  opacity: 0.65;
+}

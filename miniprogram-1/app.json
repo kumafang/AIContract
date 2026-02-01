@@ -1,0 +1,56 @@
+{
+  "lazyCodeLoading": "requiredComponents",
+  "pages": [
+    "pages/home/home",
+    "pages/history/history",
+    "pages/profile/profile",
+    "pages/camera/camera",
+    "pages/analysis/analysis",
+    "pages/report/report",
+    "pages/about/about",
+    "pages/help/help",
+    "pages/privacy/privacy",
+    "pages/share/share",
+    "pages/networktest/networktest"
+  ],
+  "window": {
+    "navigationBarTitleText": "签前助手",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#111111",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "历史"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 300000,
+    "uploadFile": 300000,
+    "downloadFile": 300000,
+    "connectSocket": 300000
+  },
+  
+  "permission": {
+    "scope.camera": {
+      "desc": "用于拍摄合同照片进行识别"
+    },
+    "scope.writePhotosAlbum": {
+      "desc": "用于保存或选择合同图片"
+    }
+  }
+}

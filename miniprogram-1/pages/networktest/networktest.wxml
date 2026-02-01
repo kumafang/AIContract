@@ -1,0 +1,28 @@
+<!--pages/networktest/networktest.wxml-->
+<view class="page">
+  <view class="nav">
+    <view class="nav-inner">
+      <view class="nav-btn" bindtap="onBack"><text class="icon">‹</text></view>
+      <view class="nav-title">网络诊断</view>
+      <view class="nav-right"></view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="row">
+      <text class="label">BASE_URL</text>
+      <text class="mono">{{baseUrl}}</text>
+    </view>
+    <view class="row">
+      <text class="label">Path</text>
+      <text class="mono">/health</text>
+    </view>
+
+    <view class="btn" bindtap="runHealth">测试 /health</view>
+  </view>
+
+  <view class="card">
+    <view class="label">结果</view>
+    <view class="mono pre">{{resultText}}</view>
+  </view>
+</view>

@@ -1,0 +1,226 @@
+<!--pages/home/home.wxml-->
+<view class="page">
+  <scroll-view scroll-y class="content" enhanced="true" show-scrollbar="false">
+    <!-- Banner -->
+    <!-- Banner -->
+    <view class="section px">
+      <view class="banner">
+        <view class="banner-text">
+          <view class="banner-brand">
+            <image class="banner-logo" src="/assets/logo.png" mode="aspectFit" />
+            <view class="banner-brand-text">
+              <view class="banner-brand-name">签前助手</view>
+              <view class="banner-brand-tag">穷理查 · 理性签约</view>
+            </view>
+          </view>
+          <view class="banner-title">合同你看懂了吗？</view>
+          <view class="banner-sub">我来帮你找出合同里容易被忽略的风险点</view>
+        </view>
+
+        <!-- 角色水印（增强品牌记忆点，但不抢文字） -->
+        <image class="banner-mascot" src="/assets/logo.png" mode="aspectFit" />
+        <view class="banner-glow"></view>
+      </view>
+    </view>
+
+    <!-- Identity -->
+    <view class="section px mt">
+      <view class="section-title">
+        <text class="section-icon">👤</text>
+        <text>请告诉我您的立场</text>
+      </view>
+
+      <view class="seg">
+        <button
+          class="seg-btn {{identity==='A' ? 'seg-active' : ''}}"
+          bindtap="setIdentityA"
+        >甲方</button>
+        <button
+          class="seg-btn {{identity==='B' ? 'seg-active' : ''}}"
+          bindtap="setIdentityB"
+        >乙方</button>
+      </view>
+    </view>
+
+    <!-- Contract Type -->
+    <view class="section px mt">
+      <view class="section-title">
+        <text class="section-icon">🗂️</text>
+        <text>这份合同属于哪类范畴？</text>
+      </view>
+
+      <view class="type-grid">
+        <block wx:for="{{contractTypes}}" wx:key="id">
+          <view class="type-item" bindtap="onSelectType" data-id="{{item.id}}">
+            <view class="type-icon {{selectedContractType===item.id ? 'type-icon-active' : ''}}">
+              <text class="type-emoji">{{item.emoji}}</text>
+            </view>
+            <view class="type-label {{selectedContractType===item.id ? 'type-label-active' : ''}}">
+              {{item.label}}
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- Upload Options -->
+    <view class="section mt">
+      <view class="px">
+        <view class="section-title plain">
+          <text class="section-icon">📄</text>
+          <text>你可以用下述任一方式把合同给我看</text>
+        </view>
+      </view>
+
+      <view class="px">
+        <view class="action-grid">
+          <button 
+            class="action-card {{uploadMethod === 'file' ? 'selected' : ''}}" bindtap="onUploadFile">
+            <view class ="action-row">
+              <view class="action-circle red">📄</view>
+              <view class="action-content">
+                <view class="action-text">上传微信里的文件</view>
+                <view class="action-sub">PDF/Word/图片</view>
+              </view>
+            </view>
+          </button>
+
+          <button class="action-card {{uploadMethod === 'text' ? 'selected' : ''}}" bindtap="openPasteModal">
+            <view class ="action-row">
+              <view class="action-circle blue">📝</view>
+              <view class="action-content">
+                <view class="action-text">复制合同内容给我</view>
+                <view class="action-sub">粘贴合同原文</view>
+              </view>
+            </view>
+          </button>
+
+          <button class="action-card {{uploadMethod === 'camera' ? 'selected' : ''}}" bindtap="goCamera">
+            <view class ="action-row">
+              <view class="action-circle green">📷</view>
+              <view class="action-content">
+                <view class="action-text">现场拍或相册上传</view>
+                <view class="action-sub">拍照/相册导入</view>
+              </view>
+            </view>
+          </button>
+        </view>
+
+        <!-- 上传结果展示：文件名 / 文本长度 -->
+        <view wx:if="{{uploaded}}" class="upload-preview">
+          <view class="upload-preview-row">
+            <view class="upload-chip">
+              <text class="upload-chip-icon">✅</text>
+              <text class="upload-chip-text">{{uploadedLabel}}</text>
+            </view>
+            <button class="upload-clear" bindtap="clearUploaded">删除</button>
+          </view>
+          <view class="upload-hint">如果上传图片，开始分析后请耐心等待图片解析。</view>
+        </view>
+
+        <!-- 开始分析按钮 -->
+        <view class="start-wrap">
+          <button
+            class="start-btn"
+            disabled="{{!uploaded}}"
+            bindtap="onStartAnalyze"
+          >开始分析</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- TipsCarousel (compact, with icon + color) -->
+    <view class="section px mt-lg mb-lg">
+      <tips-carousel title="您知道吗？" interval="5000" />
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+  
+  <!-- Paste Modal -->
+  <view wx:if="{{showPasteModal}}" class="overlay">
+    <view class="modal">
+      <view class="modal-head">
+        <view class="modal-title">粘贴合同文本</view>
+        <button class="icon-btn" bindtap="closePasteModal">✕</button>
+      </view>
+
+      <view class="modal-body">
+        <textarea
+          class="textarea"
+          value="{{pasteContent}}"
+          placeholder="在此处粘贴合同原文内容..."
+          bindinput="onPasteInput"
+        />
+      </view>
+
+      <view class="modal-foot">
+        <button class="primary" disabled="{{!pasteContentTrimmed}}" bindtap="onPasteNext">下一步</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- Confirm Modal -->
+  <view wx:if="{{confirmOpen && pending}}" class="overlay">
+    <view class="modal">
+      <view class="modal-head">
+        <view class="modal-title">确认上传信息</view>
+        <button class="icon-btn" bindtap="closeConfirm">✕</button>
+      </view>
+
+      <view class="modal-body">
+        <!-- ✅ Credits / 榔头余额 -->
+        <view class="credit-card">
+          <image class="hammer-img" src="/assets/MangoCoin.png" mode="aspectFit" />
+          <view class="credit-mid">
+            <view class="credit-title">余额</view>
+            <view class="credit-sub">本次分析将消耗「1个」芒果币</view>
+          </view>
+          <view class="credit-num">{{ credits === null ? "—" : credits }}</view>
+        </view>
+
+        <view class="kv">
+          <text class="k">您的身份：</text>
+          <text class="v">{{identityLabel}}</text>
+        </view>
+        <view class="kv">
+          <text class="k">合同类型：</text>
+          <text class="v">{{selectedTypeLabel}}</text>
+        </view>
+        
+        <view class="preview">
+          <view class="preview-k">文件/内容</view>
+
+          <block wx:if="{{pending.kind==='file'}}">
+            <view class="preview-v">
+              <view class="bold break">{{pending.fileName}}</view>
+              <view class="muted">{{pending.mimeType}}</view>
+            </view>
+          </block>
+
+          <block wx:else>
+            <view class="preview-v">
+              <view class="small break">{{pending.preview}}</view>
+              <view class="muted">共 {{pending.length}} 字</view>
+            </view>
+          </block>
+        </view>
+
+        <view class="note">
+          点击“确认”,签前助手将开始分析您的合同。
+        </view>
+      </view>
+
+      <view class="modal-foot row">
+        <button class="secondary" bindtap="closeConfirm">返回修改</button>
+        <button class="primary" bindtap="confirmStart">确认</button>
+      </view>
+    </view>
+  </view>
+  <!-- hidden canvas for image compression -->
+  <canvas
+    type="2d"
+    id="compressCanvas"
+    style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;"
+  />
+</view>

@@ -1,0 +1,79 @@
+<!-- pages/help/help.wxml -->
+<view class="page">
+  <!-- 顶部导航（custom） -->
+  <view class="nav">
+    <view class="nav-inner">
+      <view class="nav-title">帮助与反馈</view>
+      <view class="nav-center"></view>
+    </view>
+  </view>
+
+  <view class="container">
+    <!-- FAQ -->
+    <view class="kicker">常见问题</view>
+
+    <view class="faq-wrap">
+      <block wx:for="{{sections}}" wx:key="index">
+        <view class="card faq-card">
+          <view class="faq-head">
+            <view class="faq-title">{{item.title}}</view>
+          </view>
+
+          <view class="faq-body">
+            <block wx:for="{{item.items}}" wx:key="index">
+              <view class="faq-item">
+                <view
+                  class="faq-q"
+                  bindtap="toggleFAQ"
+                  data-key="{{index}}-{{item.q}}"
+                >
+                  <text class="q-text">{{item.q}}</text>
+                  <text class="chev {{openKey === (index + '-' + item.q) ? 'chev-open' : ''}}">⌄</text>
+                </view>
+
+                <view
+                  wx:if="{{openKey === (index + '-' + item.q)}}"
+                  class="faq-a"><text class="faq-a-text">{{item.a}}</text>
+                </view>
+              </view>
+            </block>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- Feedback -->
+    <view class="kicker">反馈与建议</view>
+
+    <view class="card feedback-card">
+      <textarea
+        class="textarea"
+        value="{{feedback}}"
+        placeholder="{{placeholder}}"
+        maxlength="2000"
+        auto-height="true"
+        bindinput="onInputFeedback"
+      />
+
+      <input
+        class="input"
+        value="{{contact}}"
+        placeholder="可选：留下联系方式（微信号/手机号/邮箱）"
+        maxlength="80"
+        bindinput="onInputContact"
+      />
+
+      <view class="tips">{{tips}}</view>
+
+      <view class="btn" bindtap="submitFeedback">提交反馈</view>
+    </view>
+
+    <!-- Contact -->
+    <view class="contact">
+      <view class="contact-hint">如需正式沟通，可联系支持邮箱（点击复制）：</view>
+      <view class="contact-email" bindtap="copyEmail">{{supportEmail}}</view>
+    </view>
+
+    <view class="bottom-space"></view>
+  </view>
+</view>

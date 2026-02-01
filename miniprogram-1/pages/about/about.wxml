@@ -1,0 +1,63 @@
+<!--pages/about/about.wxml-->
+<view class="page">
+
+<!-- 顶部导航（sticky） -->
+<view class="nav">
+  <view class="nav-inner">
+    <view class="nav-title">关于我们</view>
+    <view class="nav-center"></view>
+  </view>
+</view>
+
+<view class="container">
+  <!-- 顶部信息卡 -->
+  <view class="card hero">
+    <view class="hero-top">
+      <view>
+        <view class="hero-name">{{appName}}</view>
+        <view class="hero-ver">版本 {{appVersion}}</view>
+      </view>
+
+      <view class="logoImgWrap">
+        <image class="logoImg" src="/assets/logo.png" mode="aspectFill" />
+      </view>
+    </view>
+
+    <view class="hero-text">
+      <block wx:for="{{aboutText}}" wx:key="index">
+        <view class="p">{{item}}</view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 更新日志 -->
+  <view class="section-kicker">更新日志</view>
+
+  <view class="log-list">
+    <block wx:for="{{changelog}}" wx:key="version">
+      <view class="card log">
+        <view class="log-head">
+          <view class="log-ver">{{item.version}}</view>
+          <view class="log-date">{{item.date}}</view>
+        </view>
+
+        <view class="log-items">
+          <block wx:for="{{item.items}}" wx:key="index">
+            <view class="li">• {{item}}</view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- Disclaimer -->
+  <view class="card disclaimer">
+    <view class="dis-row">
+      <view class="dis-icon">i</view>
+      <view class="dis-text">{{disclaimer}}</view>
+    </view>
+  </view>
+
+  <view class="bottom-space"></view>
+</view>
+</view>
